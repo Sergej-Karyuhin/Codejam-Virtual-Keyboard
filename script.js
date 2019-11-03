@@ -43,7 +43,7 @@ let array = [
   ["BracketRight", "]","}","ъ","Ъ"],
   ["Backslash", "\\","|","\\","/"],
   ["Delete", "Del", "Del", "Del", "Del"],
-  ["CapsLock", "Caps Lock","Caps Lock","Caps Lock","Caps Lock"],
+  ["CapsLock", "CapsLock","CapsLock","CapsLock","CapsLock"],
   ["KeyA", "a","A","ф","Ф"],
   ["KeyS", "s","S","ы","Ы"],
   ["KeyD", "d","D","в","В"],
@@ -106,7 +106,7 @@ class Key {
           this.value[1] !== "Tab" &&
           this.value[1] !== "Del")
       {
-        area.value += this.value[1];
+        area.value += this.value[language];
       }
     }
   }
@@ -146,8 +146,8 @@ function printKey() {
 
 function printText() {
   for (let item of keyArray) {
-    if (!(item.value[1] === "\n")) {
-      item.elem.textContent = item.value[1];
+    if (!(item.value[language] === "\n")) {
+      item.elem.textContent = item.value[language];
     }
     else {
       item.elem.textContent = "Enter";
@@ -155,7 +155,57 @@ function printText() {
   }
 }
 
+function swapLanguage() {
+  if (language <= 2) {
+    localStorage.setItem("language", "3");
+    language = 3;
+  }
+  else {
+    localStorage.setItem("language", "1");
+    language = 1;
+  }
+}
+
+function getKey(code) {
+  for (let item of keyArray) {
+    if (item.value[0] === code) {
+      return item;
+    }
+  }
+      return 0;
+}
+
+function keyEvents() {
+  document.addEventListener("keydown", function(e) {
+    e.preventDefault();
+    let elem = getKey(e.code);
+    if (elem != 0) {
+      elem.activate();
+    }
+    if (e.shiftKey && e.altKey) {
+      swapLanguage();
+      printText();
+    }
+    else if (e.shiftKey && ((language % 2) !== 0)) {
+      language++;
+      printText();
+    }
+  });
+
+  document.addEventListener("keyup", function(e){
+    let elem = getKey(e.code);
+    if (elem != 0) {
+      elem.deactivate();
+    }
+    if (e.key === "Shift" && ((language % 2) == 0)) {
+      language--;
+      printText();
+    }
+  });
+}
+
 
 
 printKey();
 printText();
+keyEvents();
