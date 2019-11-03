@@ -11,6 +11,7 @@ let keyboard =
   keyboard.setAttribute("class", "keyboard");
   document.body.append(keyboard);
 
+let language = +localStorage.getItem("language");
 let keyArray = [];
 let array = [
   ["Backquote", "`","~","ё","Ё"],
@@ -82,6 +83,32 @@ class Key {
   constructor(value, elem) {
     this.value = value;
     this.elem = elem;
+    elem.addEventListener( "mousedown", () => this.activate() );
+    elem.addEventListener( "mouseup", () => this.deactivate() );
+  }
+  activate() {
+    this.elem.classList.add("active");
+    this.read();
+  }
+  deactivate() {
+    this.elem.classList.remove("active");
+  }
+  read() {
+    if (this.value[1] === "Backspace") {
+      area.value = area.value.slice(0, -1);
+    }
+    else {
+      if (this.value[1] !== "Ctrl" &&
+          this.value[1] !== "Meta" &&
+          this.value[1] !== "Alt" &&
+          this.value[1] !== "Shift" &&
+          this.value[1] !== "CapsLock" &&
+          this.value[1] !== "Tab" &&
+          this.value[1] !== "Del")
+      {
+        area.value += this.value[1];
+      }
+    }
   }
 }
 
