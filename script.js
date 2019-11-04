@@ -176,28 +176,28 @@ function getKey(code) {
 }
 
 function keyEvents() {
-  document.addEventListener("keydown", function(e) {
-    e.preventDefault();
-    let elem = getKey(e.code);
+  document.addEventListener("keydown", function(event) {
+    event.preventDefault();
+    let elem = getKey(event.code);
     if (elem != 0) {
       elem.activate();
     }
-    if (e.shiftKey && e.altKey) {
+    if (event.shiftKey && event.altKey) {
       swapLanguage();
       printText();
     }
-    else if (e.shiftKey && ((language % 2) !== 0)) {
+    else if ( (event.key === "Shift") && ((language % 2) !== 0) ) {
       language++;
       printText();
     }
   });
 
-  document.addEventListener("keyup", function(e){
-    let elem = getKey(e.code);
+  document.addEventListener("keyup", function(event) {
+    let elem = getKey(event.code);
     if (elem != 0) {
       elem.deactivate();
     }
-    if (e.key === "Shift" && ((language % 2) == 0)) {
+    if ( (event.key === "Shift") && ((language % 2) == 0) ) {
       language--;
       printText();
     }
