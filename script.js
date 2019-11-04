@@ -206,6 +206,8 @@ function keyEvents() {
 
 
 
+swapLanguage();
+swapLanguage();
 printKey();
 printText();
 keyEvents();
